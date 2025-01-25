@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulaire personnalisé</title>
+</head>
+<style>
+  @font-face {
+      font-family: 'Ted Next';
+      src: url('https://raw.githubusercontent.com/rogersrepaccess/devis/main/fonts/TedNext-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    body {
+      font-family: Ted Next;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+  
+  fieldset {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      box-sizing: border-box;
+      font-size: 16px;
+      font-weight: normal;
+      width: 300px;
+    }
+    legend {
+      font-weight: bold;
+      padding: 0 5px;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #button {
+      font-family: Ted Next;
+      background-color: #06d6a0;
+      font-size: 16px;
+      padding: 10px;
+      cursor: pointer;
+      transition-duration: 100ms;
+      border: 0px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #01382a;
+      font-weight: bold;
+      box-shadow: 0px 0px 5px #ddd;
+    }
+  
+    #button:hover {
+      background-color: #05b386;
+    }
+  
+    select {
+      font-family: Ted Next;
+      font-size: 16px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 200px;
+      text-align: center;
+    }
+    input {
+      font-family: Ted Next;
+      font-size: 16px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 200px;
+      text-align: center;
+    }
+    
+</style>
+<body>
+  <fieldset>
+    <legend>Nouveau trade-in</legend>
+    <form id="customForm">
+        <label for="conseiller">Conseiller / Conseillère :</label>
+        <select id="conseiller" name="entry.1469253801" required>
+            <option value="">Chargement des options...</option>
+        </select><br><br>
+
+        <label for="modele">Modèle :</label>
+        <input type="text" id="modele" name="entry.203977060" required><br><br>
+
+        <button id="button" type="button" onclick="submitForm()">Soumettre</button>
+    </form>
+  </fieldset>
+
+    <script>
+        // URL pour récupérer les options en JSON
+        const optionsUrl = "https://script.google.com/macros/s/AKfycbyQ6YGhGVxqo8FuAF-1frlQIT3I_Y2i5VqZiDw78pN4UIN8c92_AgjT3PCRzDxCzDiU/exec";
+
+        // Charger les options dans le menu déroulant
+        fetch(optionsUrl)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById("conseiller");
+                select.innerHTML = ""; // Effacer l'option par défaut
+                data.forEach(option => {
+                    const opt = document.createElement("option");
+                    opt.value = option;
+                    opt.textContent = option;
+                    select.appendChild(opt);
+                });
+            })
+            .catch(error => console.error("Erreur lors du chargement des options :", error));
+
+        // Fonction pour soumettre le formulaire
+        function submitForm() {
+            const formData = new FormData(document.getElementById("customForm"));
+            fetch("https://script.google.com/macros/s/AKfycbyQ6YGhGVxqo8FuAF-1frlQIT3I_Y2i5VqZiDw78pN4UIN8c92_AgjT3PCRzDxCzDiU/exec", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => alert("Formulaire soumis avec succès !"))
+            .catch(error => console.error("Erreur :", error));
+        }
+    </script>
+</fieldset>
+</html>
